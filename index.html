@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nosso Tempo ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -18,10 +19,9 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         .container {
@@ -34,11 +34,17 @@
             font-weight: 300;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 50px;
+            margin-bottom: 10px;
             color: rgba(255, 255, 255, 0.7);
         }
 
-        /* Contador Ultra Clean e Branco */
+        .subtitle {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 50px;
+        }
+
         .countdown-container {
             display: flex;
             justify-content: center;
@@ -67,7 +73,6 @@
             margin-top: 10px;
         }
 
-        /* Divisor sutil */
         .divider {
             width: 40px;
             height: 1px;
@@ -75,7 +80,6 @@
             margin: 0 auto 40px auto;
         }
 
-        /* Estilo das Frases Corrigido */
         .carousel-container {
             min-height: 80px;
             display: flex;
@@ -83,6 +87,7 @@
             justify-content: center;
             position: relative;
             width: 100%;
+            margin-bottom: 60px;
         }
 
         .phrase {
@@ -107,36 +112,129 @@
             position: relative;
         }
 
-        /* Ajuste para celulares */
+        /* TIMELINE GRAPHICS */
+        .timeline-section {
+            margin-top: 20px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .timeline-section h2 {
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .timeline {
+            position: relative;
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            margin: 0 auto;
+            padding-left: 20px;
+            max-width: 500px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            left: -25px;
+            top: 5px;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .timeline-form {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            display: none;
+        }
+
+        .timeline-form input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .timeline-form input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn {
+            background: #ffffff;
+            color: #0a0a0a;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.9; }
+
+        .btn-toggle {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            margin: 0 auto 30px auto;
+            display: block;
+        }
+
+        .btn-toggle:hover { color: #fff; border-color: #fff; }
+
         @media (max-width: 480px) {
-            .countdown-container {
-                gap: 15px;
-            }
-            .number {
-                font-size: 2.5rem;
-            }
-            .label {
-                font-size: 0.65rem;
-                letter-spacing: 1px;
-            }
-            h1 {
-                font-size: 1rem;
-                margin-bottom: 40px;
-            }
-            .phrase {
-                font-size: 0.95rem;
-            }
+            .countdown-container { gap: 15px; }
+            .number { font-size: 2.5rem; }
+            .label { font-size: 0.65rem; letter-spacing: 1px; }
+            h1 { font-size: 1rem; }
+            .phrase { font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>O tempo com você... </h1>
-        <p>Contando os segubdos para te ver </p>
+        <h1>O tempo com você...</h1>
+        <p class="subtitle">Contando os segundos para te ver</p>
         
         <div class="countdown-container">
-            <div class="time-box">
+            <div class="time-box">  
                 <span class="number" id="days">00</span>
                 <span class="label">Dias</span>
             </div>
@@ -163,13 +261,31 @@
             <p class="phrase">"Cada obstáculo que vencemos juntos só provou o quanto nosso amor é forte."</p>
             <p class="phrase">"Obrigado por ser meu porto seguro e a melhor parte de todos os meus dias."</p>
         </div>
+
+        <div class="divider"></div>
+
+        <div class="timeline-section">
+            <h2>Nossa Linha do Tempo</h2>
+            
+            <button class="btn btn-toggle" id="toggleFormBtn">+ Adicionar Momento</button>
+
+            <div class="timeline-form" id="momentForm">
+                <input type="text" id="momentTitle" placeholder="O que aconteceu?">
+                <input type="date" id="momentDate">
+                <button class="btn" id="saveBtn" onclick="salvarMomento()">Salvar no histórico</button>
+            </div>
+
+            <div class="timeline" id="timelineContainer"></div>
+        </div>
     </div>
 
     <script>
-        // ========================================================
-        // DATA OFICIAL AJUSTADA: 09/06/2026 às 19:30
-        // (Ano: 2026, Mês: 5 para Junho, Dia: 9, Hora: 19, Minuto: 30)
-        // ========================================================
+        // CONFIGURAÇÕES DO SUPABASE
+        const supabaseUrl = 'https://fugtgftzschowbmexvyo.supabase.co';
+        const supabaseKey = 'sb_publishable_ffnl4Z9Ro2yDysHSylGTZQ_gOyIflTE'; 
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // TIMER PRINCIPAL
         const dataInicioConversa = new Date(2026, 5, 9, 19, 30, 0); 
 
         function atualizarContador() {
@@ -191,20 +307,96 @@
             document.getElementById('minutes').innerText = exibMinutos < 10 ? '0' + exibMinutos : exibMinutos;
             document.getElementById('seconds').innerText = exibSegundos < 10 ? '0' + exibSegundos : exibSegundos;
         }
-
         setInterval(atualizarContador, 1000);
         atualizarContador();
 
-        // Lógica do Carrossel de Frases (Muda a cada 5 segundos)
+        // CARROSSEL
         const frases = document.querySelectorAll('.phrase');
         let indiceAtual = 0;
-
         function mudarFrase() {
             frases[indiceAtual].classList.remove('active');
             indiceAtual = (indiceAtual + 1) % frases.length;
             frases[indiceAtual].classList.add('active');
         }
         setInterval(mudarFrase, 5000);
+
+        // CONTROLES DA LINHA DO TEMPO
+        const toggleFormBtn = document.getElementById('toggleFormBtn');
+        const momentForm = document.getElementById('momentForm');
+        
+        toggleFormBtn.addEventListener('click', () => {
+            if (momentForm.style.display === 'block') {
+                momentForm.style.display = 'none';
+                toggleFormBtn.innerText = '+ Adicionar Momento';
+            } else {
+                momentForm.style.display = 'block';
+                toggleFormBtn.innerText = 'Fechar';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', carregarLinhaDoTempo);
+
+        // Buscar do Banco de Dados
+        async function carregarLinhaDoTempo() {
+            const container = document.getElementById('timelineContainer');
+            
+            let { data: momentos, error } = await supabase
+                .from('momentos')
+                .select('*')
+                .order('data', { ascending: true });
+
+            if (error) {
+                console.error('Erro ao buscar dados:', error);
+                return;
+            }
+
+            container.innerHTML = '';
+
+            if(momentos) {
+                momentos.forEach(momento => {
+                    const dataFormatada = momento.data.split('-').reverse().join('/');
+                    const itemHtml = `
+                        <div class="timeline-item">
+                            <div class="timeline-date">${dataFormatada}</div>
+                            <div class="timeline-title">${momento.titulo}</div>
+                        </div>
+                    `;
+                    container.innerHTML += itemHtml;
+                });
+            }
+        }
+
+        // Salvar no Banco de Dados
+        async function salvarMomento() {
+            const txtTitulo = document.getElementById('momentTitle').value;
+            const txtData = document.getElementById('momentDate').value;
+            const saveBtn = document.getElementById('saveBtn');
+
+            if (!txtTitulo || !txtData) {
+                alert('Preencha a data e a descrição!');
+                return;
+            }
+
+            saveBtn.innerText = "Salvando...";
+            saveBtn.disabled = true;
+
+            const { error } = await supabase
+                .from('momentos')
+                .insert([{ titulo: txtTitulo, data: txtData }]);
+
+            if (error) {
+                alert('Ocorreu um erro ao salvar: ' + error.message);
+            } else {
+                document.getElementById('momentTitle').value = '';
+                document.getElementById('momentDate').value = '';
+                momentForm.style.display = 'none';
+                toggleFormBtn.innerText = '+ Adicionar Momento';
+                await carregarLinhaDoTempo();
+            }
+
+            saveBtn.innerText = "Salvar no histórico";
+            saveBtn.disabled = false;
+        }
     </script>
 </body>
 </html>
