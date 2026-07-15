@@ -1,0 +1,51 @@
+.gallery-btn {
+    position: fixed; /* Fixa o botão na tela */
+    top: 25px;       /* Distância do topo da tela */
+    left: 25px;      /* Distância da borda esquerda */
+    z-index: 1000;   /* Garante que fique por cima de tudo */
+    
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 20px; /* Mais delicado para a parte superior */
+    background-color: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(252, 247, 247, 0.15);
+    border-radius: 30px;
+    color: rgba(246, 238, 238, 0.8);
+    font-size: 0.85rem; /* Fonte levemente menor para não pesar o cabeçalho */
+    font-weight: 300;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    
+}
+.gallery-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 40px 0;
+}
+.gallery-icon {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.4s ease;
+}
+/* Os efeitos de hover continuam os mesmos */
+.gallery-btn:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.gallery-btn:hover .gallery-icon {
+    transform: scale(1.15);
+}
+
+.gallery-btn:active {
+    transform: scale(0.98);
+}
